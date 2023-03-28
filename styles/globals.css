@@ -1,16 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+body,
+#__next {
+  @apply flex flex-col h-screen;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+:root {
+  --app-color-base: 235, 18.75%, 12.55%;
+  --app-alpha-background-light: 0.07;
+  --app-color-neutral: 219, 29%, 78%;
+  --app-neutral: hsla(
+    var(--app-color-neutral),
+    var(--app-alpha-background-light)
+  );
+  --app-primary: var(--color-indigo-900);
 }
 
-* {
-  box-sizing: border-box;
+html body .graphiql-container {
+  --color-base: var(--app-color-base) !important;
+  --alpha-background-light: var(--app-alpha-background-light) !important;
+  --color-neutral: var(--app-color-neutral) !important;
+  --color-primary: 349.72deg, 89.16%, 60.2% !important;
+
+  --color-secondary: 243, 100%, 77% !important;
+  --color-tertiary: 188, 100%, 44% !important;
+  --color-info: 208, 100%, 72% !important;
+  --color-success: 158, 100%, 42% !important;
+  --color-warning: 30, 100%, 80% !important;
+  --color-error: 13, 100%, 58% !important;
+}
+
+body li.CodeMirror-hint-active {
+  color: white;
+}
+
+/* Hide tabs */
+body .graphiql-container .graphiql-session-header-right {
+  display: none;
+}
+
+/* Hide history for now */
+.graphiql-container
+  .graphiql-sidebar
+  .graphiql-sidebar-section
+  button:nth-child(2) {
+  display: none;
+}
+
+/* Hide theme selection */
+reach-portal .graphiql-dialog-section:nth-of-type(2) {
+  display: none !important;
 }
