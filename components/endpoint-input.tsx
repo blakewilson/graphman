@@ -1,13 +1,10 @@
+"use client";
+
 import { LinkIcon } from "@heroicons/react/20/solid";
-import { useDebouncedCallback } from "use-debounce";
-import { useAppContext } from "../context/state";
+import { useSearchParams } from "next/navigation";
 
 export default function EndpointInput() {
-  const {
-    state: { graphqlEndpoint },
-    dispatch,
-  } = useAppContext();
-
+  const url = useSearchParams().get("url");
   return (
     <>
       <label htmlFor="search" className="sr-only">
@@ -23,13 +20,7 @@ export default function EndpointInput() {
           className="block w-full rounded-md border-0 bg-[color:var(--app-neutral)] py-3 pl-10 pr-3 text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-rose-500 text-xl"
           placeholder="https://my-site.com/graphql"
           type="search"
-          value={graphqlEndpoint}
-          onChange={(e) =>
-            dispatch({
-              type: "setGraphqlEndpoint",
-              graphqlEndpoint: e.target.value,
-            })
-          }
+          value={url ?? ""}
         />
       </div>
     </>
