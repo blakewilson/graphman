@@ -1,35 +1,19 @@
+"use client";
+
 import { createGraphiQLFetcher } from "@graphiql/toolkit";
 import { GraphiQL } from "graphiql";
-import { useEffect, useState } from "react";
-import { useAppContext } from "../context/state";
+
+import { useQueryState } from "nuqs";
 
 import "graphiql/graphiql.css";
-import { isValidUrl } from "../utils/isValidUrl";
-import { useTheme } from "@graphiql/react";
-import { useDebounce } from "use-debounce";
 
-export default function Editor() {
-  if (typeof window === "undefined") {
-    return null;
-  }
+export type EditorProps = {
+  url: string;
+  query?: string;
+  variables?: string;
+};
 
-  const {
-    state: { graphqlEndpoint },
-    dispatch,
-  } = useAppContext();
-  const [debouncedEndpoint] = useDebounce(graphqlEndpoint, 1000);
-
-  if (!isValidUrl(debouncedEndpoint)) {
-    return null;
-  }
-
-  return (
-    <GraphiQL
-      fetcher={createGraphiQLFetcher({
-        url: graphqlEndpoint,
-      })}
-      shouldPersistHeaders={false}
-      defaultQuery={`# Welcome to GraphMan
+const DEFAULT_QUERY = `# Welcome to GraphMan
 
 # GraphMan is a GraphiQL IDE that lets you specify your own GraphQL endpoint.
 
@@ -43,7 +27,28 @@ export default function Editor() {
 #         subField
 #       }
 #     }
-`}
+`;
+
+export default function Editor({ url }: EditorProps) {
+  const [query, setQuery] = useQueryState("query", { throttleMs: 1000 });
+  const [variables, setVariables] = useQueryState("variables", {
+    throttleMs: 1000,
+  });
+
+  return (
+    <GraphiQL
+      fetcher={createGraphiQLFetcher({
+        url,
+      })}
+      shouldPersistHeaders={false}
+      defaultQuery={query ? decodeURIComponent(query) : DEFAULT_QUERY}
+      onEditQuery={(newQuery) => {
+        setQuery(encodeURIComponent(newQuery));
+      }}
+      onEditVariables={(newVariables) => {
+        setVariables(encodeURIComponent(newVariables));
+      }}
+      variables={variables ? decodeURIComponent(variables) : undefined}
       // Disable history for now since records should be tied to the endpoint url
       storage={{
         getItem: (key: string) => null,
