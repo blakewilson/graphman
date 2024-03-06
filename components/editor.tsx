@@ -6,8 +6,6 @@ import { GraphiQL } from "graphiql";
 import { useQueryState } from "nuqs";
 
 import "graphiql/graphiql.css";
-import { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
 
 export type EditorProps = {
   url: string;
